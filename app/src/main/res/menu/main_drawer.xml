@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_0"
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="메인" />
+        <item
+            android:id="@+id/nav_1"
+            android:icon="@android:drawable/ic_menu_camera"
+            android:title="송장매칭" />
+    </group>
+
+    <item
+        android:title="사용자">
+        <menu>
+            <item android:id="@+id/nav_user_logout"
+                android:icon="@android:drawable/ic_lock_power_off"
+                android:title="로그아웃" />
+        </menu>
+    </item>
+
+</menu>
