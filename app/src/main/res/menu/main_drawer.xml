@@ -9,7 +9,11 @@
         <item
             android:id="@+id/nav_1"
             android:icon="@android:drawable/ic_menu_camera"
-            android:title="송장매칭" />
+            android:title="입고 및 송장매칭" />
+        <item
+            android:id="@+id/nav_3"
+            android:icon="@android:drawable/ic_menu_camera"
+            android:title="출고" />
     </group>
 
     <item

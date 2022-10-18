@@ -31,29 +31,31 @@ public class RefreshAuth {
                 Log.e(TAG, "onResponse:" + response);
 
                 if (response.isSuccessful()) {
+
                     Log.e(TAG, "onResponse:" + response.headers().get("access_token"));
                     Log.e(TAG, "onResponse:" + response.headers().get("refresh_token"));
                     PreferenceManager.setString(context, PreferenceManager.ACCESS_TOKEN,  response.headers().get("access_token").substring(7));
 
-                    Methods methods = RetrofitClient.getRetrofitInstance(context).create(Methods.class);
-                    Call<OrderBoxResponseDto> call2 = null;
-                    if (BtDeviceApi.scanStatus == 0) {
-                        // Call<OrderBoxResponseDto> call  = methods.getOrderBoxByLocalTrackingNo(trackingNo);
-                        call2  = methods.getOrderBoxByOverseasTrackingNo(trackingNo);
+
+//                    Fragment2 tf = (Fragment2) ((MainActivity)context).getSupportFragmentManager().findFragmentById(R.id.container);
+//                    if (tf == fragment) {
+//                        tf.searchTrackingNo(trackingNo, call2);
+//                    }
+
+                    if (fragment instanceof FragmentCallback2) {
+                        FragmentCallback2 callback = (FragmentCallback2) fragment;
+                        callback.searchTrackingNo(trackingNo);
+                        Log.d(TAG, "Activity is FragmentCallback2");
                     }
                     else {
-                        call2  = methods.getOrderBoxByOverseasTrackingNo(trackingNo);
-                    }
-
-                    Fragment2 tf = (Fragment2) ((MainActivity)context).getSupportFragmentManager().findFragmentById(R.id.container);
-                    if (tf == fragment) {
-                        tf.searchTrackingNo(trackingNo, call2);
+                        Log.d(TAG, "Activity is not FragmentCallback2");
                     }
                 }
                 else {
                     if (response.code() == 400) {
                     }
 
+                    PreferenceManager.removeKey(context, PreferenceManager.ACCESS_TOKEN);
                     PreferenceManager.removeKey(context, PreferenceManager.REFRESH_TOKEN);
 
                     Intent intent = new Intent(context, LoginActivity.class);

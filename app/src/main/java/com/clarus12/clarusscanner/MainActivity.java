@@ -171,9 +171,9 @@ public class MainActivity extends AppCompatActivity
 //        else if (id == R.id.nav_2) {
 //            onFragmentSelected(2, null);
 //        }
-//        else if (id == R.id.nav_3) {
-//            onFragmentSelected(3, null);
-//        }
+        else if (id == R.id.nav_3) {
+            onFragmentSelected(3, null);
+        }
         else if (id == R.id.nav_user_logout) {
             // LOG OUT Request
             Methods methods = RetrofitClient.getRetrofitInstance(MainActivity.this).create(Methods.class);
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity
             toolbar.setTitle("Main");
         } else if (position == 1) {
             curFragment = new Fragment2();
-            toolbar.setTitle("송장매칭");
+            toolbar.setTitle("입고 및 송장매칭");
         } else if (position == 2) {
             curFragment = new Fragment3();
             toolbar.setTitle("입고");
@@ -310,6 +310,7 @@ public class MainActivity extends AppCompatActivity
         else {
             tv_devStatus.setText("Bluetooth is disconnected");
         }
+
     }
 
     @SuppressLint("MissingPermission")

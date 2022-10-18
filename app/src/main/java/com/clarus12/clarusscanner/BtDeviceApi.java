@@ -5,10 +5,10 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.PointMobile.PMSyncService.BluetoothChatService;
 
@@ -17,15 +17,17 @@ public class BtDeviceApi {
 
     public static String TAG;
 
-    public static int scanStatus = 0;
-    public static TextView tv_barcode0 = null;
-    public static TextView tv_barcode1 = null;
+    public static Fragment fragment;
+
+//    public static int scanStatus = 0;
+//    public static TextView tv_barcode0 = null;
+//    public static TextView tv_barcode1 = null;
 
 
     // public static int MACAdress;
     public static String strMACAdress;
 
-    public static boolean connected = true;
+    public static boolean connected = false;
 
     // Local Bluetooth adapter
     public static BluetoothAdapter mBluetoothAdapter = null;
@@ -106,21 +108,32 @@ public class BtDeviceApi {
                     Barcode = new String(BarcodeBuff, 0, msg.arg1);
                     if(Barcode.length() != 0) {
                         // System.out.println("MESSAGE_BARCODE:" + Barcode);
-                        switch (scanStatus) {
-                            case 0:
-                                if (tv_barcode0 != null) {
-                                    tv_barcode0.setText(Barcode);
-                                }
-                                break;
-                            case 1:
-                                if (tv_barcode1 != null) tv_barcode1.setText(Barcode);
-                                break;
-                            default:
-                                if (tv_barcode1 != null) {
-                                    tv_barcode1.setText(Barcode);
-                                }
+//                        switch (scanStatus) {
+//                            case 0:
+//                                if (tv_barcode0 != null) {
+//                                    tv_barcode0.setText(Barcode);
+//                                }
+//                                break;
+//                            case 1:
+//                                if (tv_barcode1 != null) tv_barcode1.setText(Barcode);
+//                                break;
+//                            default:
+//                                if (tv_barcode1 != null) {
+//                                    tv_barcode1.setText(Barcode);
+//                                }
+//                        }
+
+                        if (fragment instanceof FragmentCallback2) {
+                            FragmentCallback2 callback = (FragmentCallback2) fragment;
+                            callback.onScanBarcode(Barcode);
+                            Log.d(TAG, "Activity is FragmentCallback2");
+                        }
+                        else {
+                            Log.d(TAG, "Activity is not FragmentCallback2");
                         }
                     }
+
+
                     break;
                 case BtDeviceApi.MESSAGE_WRITE:
                     byte[] writeBuf = (byte[]) msg.obj;

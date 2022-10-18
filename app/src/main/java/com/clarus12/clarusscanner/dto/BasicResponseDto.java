@@ -1,6 +1,6 @@
 package com.clarus12.clarusscanner.dto;
 
-public class LoginResponseDto {
+public class BasicResponseDto {
     /*
         "timestamp": "2022-08-27T13:14:26.3808362",
     "status": 200,

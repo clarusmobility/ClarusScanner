@@ -12,14 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.clarus12.clarusscanner.dto.LoginResponseDto;
+import com.clarus12.clarusscanner.dto.BasicResponseDto;
 import com.clarus12.clarusscanner.retrofit.Methods;
 import com.clarus12.clarusscanner.retrofit.RetrofitClient;
-import com.clarus12.clarusscanner.volley.LoginRequest;
-
-import org.json.JSONObject;
 
 import java.util.regex.Pattern;
 
@@ -108,11 +103,11 @@ public class LoginActivity extends AppCompatActivity {
     private void requestLogin(String userEmail, String userPassword) {
 
         Methods methods = RetrofitClient.getRetrofitInstance(LoginActivity.this).create(Methods.class);
-        Call<LoginResponseDto> call = methods.loginRequest(userEmail, userPassword);
+        Call<BasicResponseDto> call = methods.loginRequest(userEmail, userPassword);
 
-        call.enqueue(new Callback<LoginResponseDto>() {
+        call.enqueue(new Callback<BasicResponseDto>() {
             @Override
-            public void onResponse(Call<LoginResponseDto> call, Response<LoginResponseDto> response) {
+            public void onResponse(Call<BasicResponseDto> call, Response<BasicResponseDto> response) {
                 Log.e(TAG, "onResponse:" + response);
 
                 if (response.isSuccessful()) {
@@ -146,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<LoginResponseDto> call, Throwable t) {
+            public void onFailure(Call<BasicResponseDto> call, Throwable t) {
                 Log.e(TAG, "onResponse:" + t.getMessage());
             }
         });
