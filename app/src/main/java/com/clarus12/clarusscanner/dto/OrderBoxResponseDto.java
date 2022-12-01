@@ -15,6 +15,7 @@ public class OrderBoxResponseDto {
      */
 
     long orderBoxId;
+    String orderBoxShortId;
     String orderBoxName;
     String localTrackingNo;
     String overseasTrackingNo;
@@ -32,6 +33,13 @@ public class OrderBoxResponseDto {
         this.orderBoxId = orderBoxId;
     }
 
+    public String getOrderBoxShortId() {
+        return orderBoxShortId;
+    }
+
+    public void setOrderBoxShortId(String orderBoxShortId) {
+        this.orderBoxShortId = orderBoxShortId;
+    }
 
     public String getOrderBoxName() {
         return orderBoxName;

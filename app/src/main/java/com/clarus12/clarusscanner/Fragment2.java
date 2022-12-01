@@ -194,9 +194,10 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 						orderBoxId = response.body().getOrderBoxId();
 						localTrackingNo = response.body().getLocalTrackingNo();
 						overseasTrackingNo = response.body().getOverseasTrackingNo();
+						String orderBoxShortId = response.body().getOrderBoxShortId();
 						String containerCode = response.body().getContainerCode();
 
-						resultStr0 = "박스번호:\t" + (orderBoxId % 1000) +  "\n\n컨테이너코드:\t" + containerCode
+						resultStr0 = "박스번호:\t" + orderBoxShortId +  "\n\n컨테이너코드:\t" + containerCode
 								+  "\n\n국내송장번호:\t" + localTrackingNo + "\n\n해외송장번호:\t" + overseasTrackingNo;
 						tv_localresult.setText(resultStr0);
 						tv_match.setText("해외송장을 스캔해주세요");

@@ -174,6 +174,12 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nav_3) {
             onFragmentSelected(3, null);
         }
+        else if (id == R.id.nav_10) {
+            onFragmentSelected(10, null);
+        }
+        else if (id == R.id.nav_11) {
+            onFragmentSelected(11, null);
+        }
         else if (id == R.id.nav_user_logout) {
             // LOG OUT Request
             Methods methods = RetrofitClient.getRetrofitInstance(MainActivity.this).create(Methods.class);
@@ -218,13 +224,19 @@ public class MainActivity extends AppCompatActivity
             toolbar.setTitle("Main");
         } else if (position == 1) {
             curFragment = new Fragment2();
-            toolbar.setTitle("송장매칭");
+            toolbar.setTitle("송장매칭(국내->해외)");
         } else if (position == 2) {
             curFragment = new Fragment3();
             toolbar.setTitle("입고");
         } else if (position == 3) {
             curFragment = new Fragment4();
             toolbar.setTitle("출고");
+        }else if (position == 10) {
+            curFragment = new Fragment10();
+            toolbar.setTitle("국내송장 스캔");
+        }else if (position == 11) {
+            curFragment = new Fragment11();
+            toolbar.setTitle("해외송장 스캔");
         }
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container, curFragment).commit();
