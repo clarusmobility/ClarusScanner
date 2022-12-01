@@ -7,9 +7,21 @@
             android:icon="@android:drawable/ic_menu_manage"
             android:title="메인" />
         <item
+            android:id="@+id/nav_10"
+            android:icon="@android:drawable/ic_menu_camera"
+            android:title="국내송장 스캔" />
+        <item
+            android:id="@+id/nav_11"
+            android:icon="@android:drawable/ic_menu_camera"
+            android:title="해외송장 스캔" />
+        <item
+            android:id="@+id/nav_2"
+            android:icon="@android:drawable/ic_menu_camera"
+            android:title="입고" />
+        <item
             android:id="@+id/nav_1"
             android:icon="@android:drawable/ic_menu_camera"
-            android:title="입고 및 송장매칭" />
+            android:title="송장매칭(국내->해외)" />
         <item
             android:id="@+id/nav_3"
             android:icon="@android:drawable/ic_menu_camera"

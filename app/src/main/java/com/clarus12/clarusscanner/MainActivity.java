@@ -168,9 +168,9 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nav_1) {
             onFragmentSelected(1, null);
         }
-//        else if (id == R.id.nav_2) {
-//            onFragmentSelected(2, null);
-//        }
+        else if (id == R.id.nav_2) {
+            onFragmentSelected(2, null);
+        }
         else if (id == R.id.nav_3) {
             onFragmentSelected(3, null);
         }
@@ -218,12 +218,12 @@ public class MainActivity extends AppCompatActivity
             toolbar.setTitle("Main");
         } else if (position == 1) {
             curFragment = new Fragment2();
-            toolbar.setTitle("입고 및 송장매칭");
+            toolbar.setTitle("송장매칭");
         } else if (position == 2) {
             curFragment = new Fragment3();
             toolbar.setTitle("입고");
         } else if (position == 3) {
-            curFragment = new Fragment3();
+            curFragment = new Fragment4();
             toolbar.setTitle("출고");
         }
 

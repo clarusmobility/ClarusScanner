@@ -171,11 +171,12 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 		Methods methods = RetrofitClient.getRetrofitInstance(mainActivity.mContext).create(Methods.class);
 		Call<OrderBoxResponseDto> call = null;
 		if (scanStatus == 0) {
-			// Call<OrderBoxResponseDto> call  = methods.getOrderBoxByLocalTrackingNo(trackingNo);
-			call  = methods.getOrderBoxByOverseasTrackingNoAndCheckin(trackingNo);
+			// call  = methods.getOrderBoxByOverseasTrackingNoAndCheckin(trackingNo);
+			call  = methods.getOrderBoxByOverseasTrackingNo(trackingNo);
 		}
 		else if (scanStatus == 1) {
-			call  = methods.getOrderBoxByOverseasTrackingNoAndCheckin(trackingNo);
+			// call  = methods.getOrderBoxByOverseasTrackingNoAndCheckin(trackingNo);
+			call  = methods.getOrderBoxByOverseasTrackingNo(trackingNo);
 		}
 
 		call.enqueue(new Callback<OrderBoxResponseDto>() {
@@ -295,7 +296,7 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 
 	@Override
 	public void onScanBarcode(String trackingNo) {
-		Log.i(TAG, "------------------- changeText");
+		Log.i(TAG, "------------------- callback onScanBarcode");
 
 		if (scanStatus == 0) {
 

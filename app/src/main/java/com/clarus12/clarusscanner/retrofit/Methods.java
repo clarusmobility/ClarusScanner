@@ -14,6 +14,13 @@ import retrofit2.http.Path;
 
 public interface Methods {
 
+    @GET("/api/v1/trackingNo/0/{trackingNo}")
+    Call<OrderBoxResponseDto> getOrderBoxByLocalTrackingNo(@Path("trackingNo") String trackingNo);
+
+    @GET("/api/v1/trackingNo/1/{trackingNo}")
+    Call<OrderBoxResponseDto> getOrderBoxByOverseasTrackingNo(@Path("trackingNo") String trackingNo);
+
+
     @PUT("/api/v1/orderbox/status/checkin/0/{trackingNo}")
     Call<OrderBoxResponseDto> getOrderBoxByLocalTrackingNoAndCheckin(@Path("trackingNo") String trackingNo);
 

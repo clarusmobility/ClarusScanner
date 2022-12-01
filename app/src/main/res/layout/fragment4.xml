@@ -14,7 +14,7 @@
 
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
-        android:text="입고요청 스캔:"
+        android:text="출고요청 스캔:"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="국내송장을 스캔해주세요"
+        android:text="해외송장을 스캔해주세요"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"

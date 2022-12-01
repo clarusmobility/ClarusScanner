@@ -3,6 +3,7 @@ package com.clarus12.clarusscanner;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -135,18 +136,19 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 	public void searchTrackingNo(String trackingNo) {
 
 		Methods methods = RetrofitClient.getRetrofitInstance(mainActivity.mContext).create(Methods.class);
-		Call<BasicResponseDto> call  = methods.releaseTrackingNo(trackingNo);
+		Call<OrderBoxResponseDto> call  = methods.getOrderBoxByOverseasTrackingNoAndCheckin(trackingNo);
 
-		call.enqueue(new Callback<BasicResponseDto>() {
+		call.enqueue(new Callback<OrderBoxResponseDto>() {
 			@Override
-			public void onResponse(Call<BasicResponseDto> call, Response<BasicResponseDto> response) {
+			public void onResponse(Call<OrderBoxResponseDto> call, Response<OrderBoxResponseDto> response) {
 				Log.e(TAG, "onResponse:" + trackingNo);
 				Log.e(TAG, "onResponse:" + response.code());
 
 				if (response.isSuccessful()) {
 					Log.e(TAG, "onResponse:" + response);
 					//Log.e(TAG, "onResponse body:" + response.body().getResult());
-					tv_scanResult.setText("성공");
+					tv_scanResult.setText("입고완료 성공");
+					tv_scanResult.setTextColor(Color.parseColor("#00FF00"));
 				}
 				else {
 					Log.e(TAG, "onResponse:" + response);
@@ -187,18 +189,21 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 							RefreshAuth.refresh(MainActivity.mContext, 0, trackingNo, tf);
 						}
 						else {
-							tv_scanResult.setText(trackingNo + " -> " + message);
+							tv_scanResult.setText("실패: " + message);
+							tv_scanResult.setTextColor(Color.parseColor("#E91E63"));
 						}
 					}
 					else {
 						tv_scanResult.setText("실패");
+						tv_scanResult.setTextColor(Color.parseColor("#E91E63"));
 					}
 
 				}
 			}
 
+
 			@Override
-			public void onFailure(Call<BasicResponseDto> call, Throwable t) {
+			public void onFailure(Call<OrderBoxResponseDto> call, Throwable t) {
 				Log.e(TAG, "onFailure:" + t.getMessage());
 
 			}
@@ -207,7 +212,7 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 
 	@Override
 	public void onScanBarcode(String trackingNo) {
-		Log.i(TAG, "------------------- changeText");
+		Log.i(TAG, "------------------- callback onScanBarcode");
 
 		tv_overseasBarcode.setText(trackingNo);
 		tv_scanResult.setText("요청중... 잠시만 기다려주세요");
