@@ -47,6 +47,11 @@ public class RefreshAuth {
                         callback.searchTrackingNo(trackingNo);
                         Log.d(TAG, "Activity is FragmentCallback2");
                     }
+                    else if (fragment instanceof FragmentCallback3) {
+                        FragmentCallback3 callback = (FragmentCallback3) fragment;
+                        callback.callbackFunction();
+                        Log.d(TAG, "Activity is FragmentCallback3");
+                    }
                     else {
                         Log.d(TAG, "Activity is not FragmentCallback2");
                     }
@@ -55,6 +60,7 @@ public class RefreshAuth {
                     if (response.code() == 400) {
                     }
 
+                    // Go Login
                     PreferenceManager.removeKey(context, PreferenceManager.ACCESS_TOKEN);
                     PreferenceManager.removeKey(context, PreferenceManager.REFRESH_TOKEN);
 

@@ -171,11 +171,9 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 		Methods methods = RetrofitClient.getRetrofitInstance(mainActivity.mContext).create(Methods.class);
 		Call<OrderBoxResponseDto> call = null;
 		if (scanStatus == 0) {
-			// call  = methods.getOrderBoxByOverseasTrackingNoAndCheckin(trackingNo);
-			call  = methods.getOrderBoxByOverseasTrackingNo(trackingNo);
+			call  = methods.getOrderBoxByLocalTrackingNo(trackingNo);
 		}
 		else if (scanStatus == 1) {
-			// call  = methods.getOrderBoxByOverseasTrackingNoAndCheckin(trackingNo);
 			call  = methods.getOrderBoxByOverseasTrackingNo(trackingNo);
 		}
 

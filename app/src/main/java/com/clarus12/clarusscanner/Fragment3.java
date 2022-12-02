@@ -136,7 +136,7 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 	public void searchTrackingNo(String trackingNo) {
 
 		Methods methods = RetrofitClient.getRetrofitInstance(mainActivity.mContext).create(Methods.class);
-		Call<OrderBoxResponseDto> call  = methods.getOrderBoxByOverseasTrackingNoAndCheckin(trackingNo);
+		Call<OrderBoxResponseDto> call  = methods.getOrderBoxByLocalTrackingNoAndCheckin(trackingNo);
 
 		call.enqueue(new Callback<OrderBoxResponseDto>() {
 			@Override
