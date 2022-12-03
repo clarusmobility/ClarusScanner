@@ -19,6 +19,10 @@ public class OrderBoxResponseDto {
     String orderBoxName;
     String localTrackingNo;
     String overseasTrackingNo;
+    String shipStatusName;
+
+
+
     String containerCode;
     String senderName;
     String senderAddress;
@@ -103,5 +107,13 @@ public class OrderBoxResponseDto {
 
     public void setReceiverAddress(String receiverAddress) {
         this.receiverAddress = receiverAddress;
+    }
+
+    public String getShipStatusName() {
+        return shipStatusName;
+    }
+
+    public void setShipStatusName(String shipStatusName) {
+        this.shipStatusName = shipStatusName;
     }
 }

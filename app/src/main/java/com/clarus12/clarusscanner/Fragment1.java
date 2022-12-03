@@ -2,22 +2,17 @@ package com.clarus12.clarusscanner;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
-import com.clarus12.clarusscanner.dto.OrderBoxResponseDto;
 import com.clarus12.clarusscanner.dto.WmsSummaryResponse;
 import com.clarus12.clarusscanner.retrofit.Methods;
 import com.clarus12.clarusscanner.retrofit.RetrofitClient;
@@ -34,7 +29,7 @@ import retrofit2.Response;
 
 
 
-public class Fragment1 extends Fragment implements FragmentCallback3  {
+public class Fragment1 extends Fragment  {
 	private static final String TAG = "Fragment1";
 	MainActivity mainActivity;
 	FragmentCallback callback;
@@ -54,7 +49,7 @@ public class Fragment1 extends Fragment implements FragmentCallback3  {
 			Log.d(TAG, "Activity is not FragmentCallback.");
 		}
 
-		callbackFunction();
+		callbackGetWmsSummary();
 	}
 
 	@Override
@@ -120,7 +115,7 @@ public class Fragment1 extends Fragment implements FragmentCallback3  {
 	}
 
 
-	public void callbackFunction() {
+	public void callbackGetWmsSummary() {
 
 		Methods methods = RetrofitClient.getRetrofitInstance(mainActivity.mContext).create(Methods.class);
 		Call<WmsSummaryResponse> call = null;
@@ -136,10 +131,9 @@ public class Fragment1 extends Fragment implements FragmentCallback3  {
 					Log.e(TAG, "onResponse:" + response);
 
 					WmsSummaryResponse dto = response.body();
-					Log.d(TAG, "onResponse:" + dto.getCompleteCheckIn());
-
-					Log.d(TAG, "onResponse:" + dto.getReadyRelease());
-					Log.d(TAG, "onResponse:" + dto.getCompleteRelease());
+//					Log.d(TAG, "onResponse:" + dto.getCompleteCheckIn());
+//					Log.d(TAG, "onResponse:" + dto.getReadyRelease());
+//					Log.d(TAG, "onResponse:" + dto.getCompleteRelease());
 
 					tv_cnt1.setText("입고완료 : 박스 " + dto.getCompleteCheckIn() + "개");
 					tv_cnt2.setText("출고지시 : 박스 " + dto.getReadyRelease()  + "개");
@@ -169,7 +163,7 @@ public class Fragment1 extends Fragment implements FragmentCallback3  {
 						}
 					}
 
-					if (errMsg != null && (code.equals("INVALID_ACCESS_TOKEN") || code.equals("EXPIRE_ACCESS_TOKEN"))) {
+					if (errMsg != null && code != null && (code.equals("INVALID_ACCESS_TOKEN") || code.equals("EXPIRE_ACCESS_TOKEN"))) {
 						if (code.equals("INVALID_ACCESS_TOKEN")) {
 							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
 							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.REFRESH_TOKEN);
@@ -184,7 +178,6 @@ public class Fragment1 extends Fragment implements FragmentCallback3  {
 						}
 					}
 					else {
-
 					}
 				}
 			}

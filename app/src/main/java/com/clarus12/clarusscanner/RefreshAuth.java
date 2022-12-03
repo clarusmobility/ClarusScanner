@@ -1,13 +1,12 @@
 package com.clarus12.clarusscanner;
 
-import android.Manifest;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 
-import com.clarus12.clarusscanner.dto.OrderBoxResponseDto;
 import com.clarus12.clarusscanner.retrofit.Methods;
 import com.clarus12.clarusscanner.retrofit.RetrofitClient;
 
@@ -17,7 +16,7 @@ import retrofit2.Response;
 
 public class RefreshAuth {
 
-    static public void refresh(Context context, int scanType, String trackingNo, Fragment fragment) {
+    static public void refresh(Context context, int fragmentId, String trackingNo, Fragment fragment) {
 
         String TAG  = "RefreshAuth";
 
@@ -42,19 +41,25 @@ public class RefreshAuth {
 //                        tf.searchTrackingNo(trackingNo, call2);
 //                    }
 
+
                     if (fragment instanceof FragmentCallback2) {
-                        FragmentCallback2 callback = (FragmentCallback2) fragment;
-                        callback.searchTrackingNo(trackingNo);
                         Log.d(TAG, "Activity is FragmentCallback2");
-                    }
-                    else if (fragment instanceof FragmentCallback3) {
-                        FragmentCallback3 callback = (FragmentCallback3) fragment;
-                        callback.callbackFunction();
-                        Log.d(TAG, "Activity is FragmentCallback3");
+
+                        FragmentCallback2 callback = (FragmentCallback2) fragment;
+                        if (trackingNo.length() > 0) {
+                            callback.searchTrackingNo(trackingNo);
+                        }
+                        else {
+                            Log.d(TAG, "onFragmentSelected");
+                            ((MainActivity)context).onFragmentSelected(fragmentId, null);
+                            // FragmentTransaction ft = ((MainActivity)context).getFragmentManager().beginTransaction();
+                        }
                     }
                     else {
                         Log.d(TAG, "Activity is not FragmentCallback2");
+                        ((MainActivity)context).onFragmentSelected(fragmentId, null);
                     }
+
                 }
                 else {
                     if (response.code() == 400) {

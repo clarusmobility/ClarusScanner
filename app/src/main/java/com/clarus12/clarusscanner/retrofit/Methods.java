@@ -5,6 +5,8 @@ import com.clarus12.clarusscanner.dto.ResultResponseDto;
 import com.clarus12.clarusscanner.dto.OrderBoxResponseDto;
 import com.clarus12.clarusscanner.dto.WmsSummaryResponse;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -32,6 +34,9 @@ public interface Methods {
 
     @GET("/api/v1/wms/summary")
     Call<WmsSummaryResponse> wmsSummary();
+
+    @GET("/api/v1/orderbox/status/{shipstatus}")
+    Call<List<OrderBoxResponseDto>> getOrderBoxListByShipStatus(@Path("shipstatus") int shipstatus);
 
     @FormUrlEncoded
     @POST("/api/auth/login")

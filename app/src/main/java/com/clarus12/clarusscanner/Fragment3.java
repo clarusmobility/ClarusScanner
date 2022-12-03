@@ -175,7 +175,7 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 					}
 
 					if (errMsg != null) {
-						if (code.equals("INVALID_ACCESS_TOKEN")) {
+						if (code != null && code.equals("INVALID_ACCESS_TOKEN")) {
 							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
 							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.REFRESH_TOKEN);
 
@@ -183,10 +183,10 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 							intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 							MainActivity.mContext.startActivity(intent);
 						}
-						else if (code.equals("EXPIRE_ACCESS_TOKEN")) {
+						else if (code != null && code.equals("EXPIRE_ACCESS_TOKEN")) {
 							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
 							Fragment3 tf = (Fragment3) ((MainActivity)MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
-							RefreshAuth.refresh(MainActivity.mContext, 0, trackingNo, tf);
+							RefreshAuth.refresh(MainActivity.mContext, 2, trackingNo, tf);
 						}
 						else {
 							tv_scanResult.setText("실패: " + message);

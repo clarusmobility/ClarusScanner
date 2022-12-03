@@ -98,10 +98,14 @@ public class Fragment10 extends Fragment implements FragmentCallback2 {
                     orderBoxId = response.body().getOrderBoxId();
                     localTrackingNo = response.body().getLocalTrackingNo();
                     overseasTrackingNo = response.body().getOverseasTrackingNo();
+                    String shipStatusName = response.body().getShipStatusName();
                     String containerCode = response.body().getContainerCode();
                     String orderBoxShortId = response.body().getOrderBoxShortId();
-                    resultStr0 = "박스번호:\t" + orderBoxShortId +  "\n\n컨테이너코드:\t" + containerCode
-                            +  "\n\n국내송장번호:\t" + localTrackingNo + "\n\n해외송장번호:\t" + overseasTrackingNo;
+                    resultStr0 = "박스번호:\t" + orderBoxShortId
+                            +  "\n\n배송상태:\t" +  shipStatusName
+                            +  "\n\n컨테이너코드:\t" + containerCode
+                            +  "\n\n국내송장번호:\t" + localTrackingNo
+                            + "\n\n해외송장번호:\t" + overseasTrackingNo;
                     tv_result.setText(resultStr0);
 
                 }
@@ -129,7 +133,7 @@ public class Fragment10 extends Fragment implements FragmentCallback2 {
                         }
                     }
 
-                    if (errMsg != null && (code.equals("INVALID_ACCESS_TOKEN") || code.equals("EXPIRE_ACCESS_TOKEN"))) {
+                    if (errMsg != null && code != null && (code.equals("INVALID_ACCESS_TOKEN") || code.equals("EXPIRE_ACCESS_TOKEN"))) {
                         if (code.equals("INVALID_ACCESS_TOKEN")) {
                             PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
                             PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.REFRESH_TOKEN);
@@ -140,7 +144,7 @@ public class Fragment10 extends Fragment implements FragmentCallback2 {
                         } else if (code.equals("EXPIRE_ACCESS_TOKEN")) {
                             PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
                             Fragment10 tf = (Fragment10) ((MainActivity) MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
-                            RefreshAuth.refresh(MainActivity.mContext, 0, trackingNo, tf);
+                            RefreshAuth.refresh(MainActivity.mContext, 10, trackingNo, tf);
                         }
                     }
                     else {

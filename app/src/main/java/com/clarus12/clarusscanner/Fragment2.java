@@ -193,10 +193,14 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 						localTrackingNo = response.body().getLocalTrackingNo();
 						overseasTrackingNo = response.body().getOverseasTrackingNo();
 						String orderBoxShortId = response.body().getOrderBoxShortId();
+						String shipStatusName = response.body().getShipStatusName();
 						String containerCode = response.body().getContainerCode();
 
-						resultStr0 = "박스번호:\t" + orderBoxShortId +  "\n\n컨테이너코드:\t" + containerCode
-								+  "\n\n국내송장번호:\t" + localTrackingNo + "\n\n해외송장번호:\t" + overseasTrackingNo;
+						resultStr0 = "박스번호:\t" + orderBoxShortId
+								+  "\n\n배송상태:\t" +  shipStatusName
+								+  "\n\n컨테이너코드:\t" + containerCode
+								+  "\n\n국내송장번호:\t" + localTrackingNo
+								+ "\n\n해외송장번호:\t" + overseasTrackingNo;
 						tv_localresult.setText(resultStr0);
 						tv_match.setText("해외송장을 스캔해주세요");
 
@@ -245,7 +249,7 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 						}
 					}
 
-					if (errMsg != null && (code.equals("INVALID_ACCESS_TOKEN") || code.equals("EXPIRE_ACCESS_TOKEN"))) {
+					if (errMsg != null && code != null && (code.equals("INVALID_ACCESS_TOKEN") || code.equals("EXPIRE_ACCESS_TOKEN"))) {
 						if (code.equals("INVALID_ACCESS_TOKEN")) {
 							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
 							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.REFRESH_TOKEN);
@@ -256,7 +260,7 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 						} else if (code.equals("EXPIRE_ACCESS_TOKEN")) {
 							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
 							Fragment2 tf = (Fragment2) ((MainActivity) MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
-							RefreshAuth.refresh(MainActivity.mContext, 0, trackingNo, tf);
+							RefreshAuth.refresh(MainActivity.mContext, 1, trackingNo, tf);
 						}
 					}
 					else {
