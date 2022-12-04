@@ -50,7 +50,7 @@
                 android:layout_alignParentBottom="true"
                 android:background="#C0C0C0C0"
                 android:text="Bluetooth is ... "
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
             <!-- FrameLayout
                 android:id="@+id/container"
                 android:layout_width="match_parent"

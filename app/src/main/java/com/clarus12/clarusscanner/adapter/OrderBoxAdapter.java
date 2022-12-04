@@ -1,4 +1,4 @@
-package com.clarus12.clarusscanner.dto;
+package com.clarus12.clarusscanner.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.clarus12.clarusscanner.R;
+import com.clarus12.clarusscanner.dto.OrderBoxResponseDto;
 
 import java.util.ArrayList;
 

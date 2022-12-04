@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,7 +20,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.clarus12.clarusscanner.dto.OrderBoxAdapter;
+import com.clarus12.clarusscanner.adapter.OrderBoxAdapter;
 import com.clarus12.clarusscanner.dto.OrderBoxResponseDto;
 import com.clarus12.clarusscanner.retrofit.Methods;
 import com.clarus12.clarusscanner.retrofit.RetrofitClient;
@@ -45,6 +46,7 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 
 	TextView tv_scanResult;
 	TextView tv_barcode;
+	TextView tv_titleMainList;
 
 	ArrayList<OrderBoxResponseDto> mArrayList;
 	OrderBoxAdapter mAdapter;
@@ -86,6 +88,7 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 		dto.setContainerCode("컨테이너코드");
 		dto.setShipStatusName("status");
 		mArrayList.add(dto);
+		tv_titleMainList = rootView.findViewById(R.id.title_main_list);
 
 		// 5 : 국내배송중
 		// 6 : 배송완료
@@ -120,7 +123,7 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 
 		tv_scanResult = rootView.findViewById(R.id.tv_scanResult);
 
-		tv_barcode = rootView.findViewById(R.id.tv_overseasBarcode);
+		tv_barcode = rootView.findViewById(R.id.tv_barcode);
 		// BtDeviceApi.tv_barcode1 = tv_overseasBarcode;
 
 //		tv_overseasBarcode.addTextChangedListener(new TextWatcher() {
@@ -153,10 +156,19 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 			@Override
 			public void onClick(View view) {
 				tv_barcode.setText("");
-				tv_scanResult.setText("해외송장을 스캔해주세요");
+				tv_scanResult.setText("국내송장을 스캔해주세요");
 			}
 		});
-
+		Button btnSearch = rootView.findViewById(R.id.btn_search);
+		btnSearch.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (tv_barcode.getText().toString().length() > 0) {
+					searchTrackingNo(tv_barcode.getText().toString());
+				}
+				mainActivity.hideKeyboard();
+			}
+		});
 		return rootView;
 	}
 
@@ -165,12 +177,15 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 		Methods methods = RetrofitClient.getRetrofitInstance(mainActivity.mContext).create(Methods.class);
 		Call<OrderBoxResponseDto> call  = methods.getOrderBoxByLocalTrackingNoAndCheckin(trackingNo);
 
+		tv_barcode.setText(trackingNo);
+		tv_barcode.setTypeface(null, Typeface.BOLD);
+		tv_scanResult.setText("요청중... 잠시만 기다려주세요");
+
 		call.enqueue(new Callback<OrderBoxResponseDto>() {
 			@Override
 			public void onResponse(Call<OrderBoxResponseDto> call, Response<OrderBoxResponseDto> response) {
 				Log.e(TAG, "onResponse:" + trackingNo);
 				Log.e(TAG, "onResponse:" + response.code());
-
 				if (response.isSuccessful()) {
 					Log.e(TAG, "onResponse:" + response);
 					//Log.e(TAG, "onResponse body:" + response.body().getResult());
@@ -256,12 +271,14 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 
 		Methods methods = RetrofitClient.getRetrofitInstance(mainActivity.mContext).create(Methods.class);
 		Call<List<OrderBoxResponseDto>> call  = methods.getOrderBoxListByShipStatus2(shipStatus);
+		tv_titleMainList.setText("입고대기 목록 요청중...");
 
 		call.enqueue(new Callback<List<OrderBoxResponseDto>>() {
 			@Override
 			public void onResponse(Call<List<OrderBoxResponseDto>> call, Response<List<OrderBoxResponseDto>> response) {
 				// Log.e(TAG, "onResponse:" + shipStatus);
 				Log.e(TAG, "onResponse:" + response.code());
+				tv_titleMainList.setText("입고대기 목록");
 
 				if (response.isSuccessful()) {
 					Log.e(TAG, "onResponse:" + response);
@@ -341,10 +358,15 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 	@Override
 	public void onScanBarcode(String trackingNo) {
 		Log.i(TAG, "------------------- callback onScanBarcode");
-
-		tv_barcode.setText(trackingNo);
-		tv_barcode.setTypeface(null, Typeface.BOLD);
-		tv_scanResult.setText("요청중... 잠시만 기다려주세요");
 		searchTrackingNo(trackingNo);
+	}
+
+	private void hideKeyboard()  {
+		if (getActivity() != null && getActivity().getCurrentFocus() != null)
+		{
+			// 프래그먼트기 때문에 getActivity() 사용
+			InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+			inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+		}
 	}
 }

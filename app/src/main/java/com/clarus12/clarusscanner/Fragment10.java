@@ -75,6 +75,16 @@ public class Fragment10 extends Fragment implements FragmentCallback2 {
                 tv_result.setText("국내송장을 스캔해주세요");
             }
         });
+        Button btnSearch = rootView.findViewById(R.id.btn_search);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tv_barcode.getText().toString().length() > 0) {
+                    searchTrackingNo(tv_barcode.getText().toString());
+                }
+                mainActivity.hideKeyboard();
+            }
+        });
         return rootView;
     }
 
@@ -84,6 +94,10 @@ public class Fragment10 extends Fragment implements FragmentCallback2 {
         Call<OrderBoxResponseDto> call = null;
 
         call  = methods.getOrderBoxByLocalTrackingNo(trackingNo);
+
+        tv_barcode.setText(trackingNo);
+        tv_barcode.setTypeface(null, Typeface.BOLD);
+        tv_result.setText("검색중... 잠시만 기다려주세요");
 
         call.enqueue(new Callback<OrderBoxResponseDto>() {
             @Override
@@ -102,7 +116,8 @@ public class Fragment10 extends Fragment implements FragmentCallback2 {
                     String shipStatusName = response.body().getShipStatusName();
                     String containerCode = response.body().getContainerCode();
                     String orderBoxShortId = response.body().getOrderBoxShortId();
-                    resultStr0 = "박스번호:\t" + orderBoxShortId
+                    resultStr0 = "ID:\t" + orderBoxId
+                            + "\n\n박스번호:\t" + orderBoxShortId
                             +  "\n\n배송상태:\t" +  shipStatusName
                             +  "\n\n컨테이너코드:\t" + containerCode
                             +  "\n\n국내송장번호:\t" + localTrackingNo
@@ -149,7 +164,7 @@ public class Fragment10 extends Fragment implements FragmentCallback2 {
                         }
                     }
                     else {
-                        String str = "국내송장번호 " + trackingNo + "을\n\n 찾을 수 없습니다";
+                        String str = "국내송장번호 " + trackingNo + "을\n\n찾을 수 없습니다";
                         resultStr0 = str;
                         tv_result.setText(str);
                     }
@@ -160,7 +175,7 @@ public class Fragment10 extends Fragment implements FragmentCallback2 {
             public void onFailure(Call<OrderBoxResponseDto> call, Throwable t) {
                 Log.e(TAG, "onFailure:" + t.getMessage());
 
-                String str = "국내송장번호 " + trackingNo + "을\n\n 찾을 수 없습니다";
+                String str = "국내송장번호 " + trackingNo + "을\n\n찾을 수 없습니다";
 
                 resultStr0 = str;
                 tv_result.setText(str);
@@ -172,10 +187,7 @@ public class Fragment10 extends Fragment implements FragmentCallback2 {
     public void onScanBarcode(String trackingNo) {
         Log.i(TAG, "------------------- callback onScanBarcode");
 
-        tv_barcode.setText(trackingNo);
-        tv_barcode.setTypeface(null, Typeface.BOLD);
 
-        tv_result.setText("검색중... 잠시만 기다려주세요");
         searchTrackingNo(trackingNo);
     }
 }

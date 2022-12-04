@@ -197,7 +197,8 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 						String shipStatusName = response.body().getShipStatusName();
 						String containerCode = response.body().getContainerCode();
 
-						resultStr0 = "박스번호:\t" + orderBoxShortId
+						resultStr0 = "ID:\t" + orderBoxId
+								+ "\n\n박스번호:\t" + orderBoxShortId
 								+  "\n\n배송상태:\t" +  shipStatusName
 								+  "\n\n컨테이너코드:\t" + containerCode
 								+  "\n\n국내송장번호:\t" + localTrackingNo
@@ -265,7 +266,7 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 						}
 					}
 					else {
-						String str = "송장번호 " + trackingNo + "을\n\n 찾을 수 없습니다";
+						String str = "송장번호 " + trackingNo + "을\n\n찾을 수 없습니다";
 						if (scanStatus == 0) {
 							resultStr0 = str;
 							tv_localresult.setText(str);
@@ -283,7 +284,7 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 			public void onFailure(Call<OrderBoxResponseDto> call, Throwable t) {
 				Log.e(TAG, "onFailure:" + t.getMessage());
 
-				String str = "송장번호 " + trackingNo + "을\n\n 찾을 수 없습니다";
+				String str = "송장번호 " + trackingNo + "을\n\n찾을 수 없습니다";
 
 				if (scanStatus == 0) {
 					resultStr0 = str;

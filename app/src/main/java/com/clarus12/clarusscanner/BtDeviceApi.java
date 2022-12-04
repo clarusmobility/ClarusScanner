@@ -2,6 +2,7 @@ package com.clarus12.clarusscanner;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -90,12 +91,14 @@ public class BtDeviceApi {
                             // Log.i(TAG, "MESSAGE_STATE_CHANGE:  STATE_CONNECTED" + msg.arg1);
                             connected = true;
                             MainActivity.tv_devStatus.setText("Bluetooth is connected");
+                            MainActivity.tv_devStatus.setTextColor(Color.parseColor("#000000"));
                             // Toast.makeText(MainActivity.mContext,"Bluetooth is connected", Toast.LENGTH_SHORT).show();
                             break;
                         case BluetoothChatService.STATE_LISTEN:
                             // Log.i(TAG, "MESSAGE_STATE_CHANGE:  STATE_LISTEN" + msg.arg1);
                             connected = false;
                             MainActivity.tv_devStatus.setText("Bluetooth is disconnected");
+                            MainActivity.tv_devStatus.setTextColor(Color.parseColor("#E91E63"));
                             // Toast.makeText(MainActivity.mContext,"Bluetooth is disconnected", Toast.LENGTH_SHORT).show();
                             break;
                     }
