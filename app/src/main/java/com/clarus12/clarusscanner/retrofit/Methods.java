@@ -38,6 +38,9 @@ public interface Methods {
     @GET("/api/v1/orderbox/status/{shipstatus}")
     Call<List<OrderBoxResponseDto>> getOrderBoxListByShipStatus(@Path("shipstatus") int shipstatus);
 
+    @GET("/api/v1/orderbox/status2/{shipstatus}")
+    Call<List<OrderBoxResponseDto>> getOrderBoxListByShipStatus2(@Path("shipstatus") int shipstatus);
+
     @FormUrlEncoded
     @POST("/api/auth/login")
     Call<BasicResponseDto> loginRequest(@Field("email") String email, @Field("password") String password);

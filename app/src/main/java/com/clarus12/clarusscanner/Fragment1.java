@@ -173,8 +173,8 @@ public class Fragment1 extends Fragment  {
 							MainActivity.mContext.startActivity(intent);
 						} else if (code.equals("EXPIRE_ACCESS_TOKEN")) {
 							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
-							Fragment1 tf = (Fragment1) ((MainActivity) MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
-							RefreshAuth.refresh(MainActivity.mContext, 0, "", tf);
+							Fragment tf = (Fragment) ((MainActivity) MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
+							RefreshAuth.refresh(MainActivity.mContext, 0, "");
 						}
 					}
 					else {

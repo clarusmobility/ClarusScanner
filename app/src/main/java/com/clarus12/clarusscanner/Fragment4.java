@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,8 +44,7 @@ public class Fragment4 extends Fragment implements FragmentCallback2 {
     MainActivity mainActivity;
 
     TextView tv_scanResult;
-    String resultStr1;
-    TextView tv_overseasBarcode;
+    TextView tv_barcode;
 
     ArrayList<OrderBoxResponseDto> mArrayList;
     OrderBoxAdapter mAdapter;
@@ -81,9 +81,17 @@ public class Fragment4 extends Fragment implements FragmentCallback2 {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), mLinearLayoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setAdapter(mAdapter);
+
+        OrderBoxResponseDto dto = new OrderBoxResponseDto();
+        dto.setOrderBoxShortId("No");
+        dto.setLocalTrackingNo("국내송장");
+        dto.setOverseasTrackingNo("해외송장");
+        dto.setContainerCode("컨테이너코드");
+        dto.setShipStatusName("status");
+        mArrayList.add(dto);
+
         // 8 : 출고지시
         this.getOrderBoxList(8);
-
 
 
 //		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -115,7 +123,7 @@ public class Fragment4 extends Fragment implements FragmentCallback2 {
 
         tv_scanResult = rootView.findViewById(R.id.tv_scanResult);
 
-        tv_overseasBarcode = rootView.findViewById(R.id.tv_overseasBarcode);
+        tv_barcode = rootView.findViewById(R.id.tv_overseasBarcode);
         // BtDeviceApi.tv_barcode1 = tv_overseasBarcode;
 
 //		tv_overseasBarcode.addTextChangedListener(new TextWatcher() {
@@ -147,7 +155,7 @@ public class Fragment4 extends Fragment implements FragmentCallback2 {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tv_overseasBarcode.setText("");
+                tv_barcode.setText("");
                 tv_scanResult.setText("해외송장을 스캔해주세요");
             }
         });
@@ -223,8 +231,8 @@ public class Fragment4 extends Fragment implements FragmentCallback2 {
                         }
                         else if (code != null && code.equals("EXPIRE_ACCESS_TOKEN")) {
                             PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
-                            Fragment4 tf = (Fragment4) ((MainActivity)MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
-                            RefreshAuth.refresh(MainActivity.mContext, 3, trackingNo, tf);
+                            Fragment tf = (Fragment) ((MainActivity)MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
+                            RefreshAuth.refresh(MainActivity.mContext, 3, trackingNo);
                         }
                         else {
                             tv_scanResult.setText("실패: " + message);
@@ -255,7 +263,7 @@ public class Fragment4 extends Fragment implements FragmentCallback2 {
         call.enqueue(new Callback<List<OrderBoxResponseDto>>() {
             @Override
             public void onResponse(Call<List<OrderBoxResponseDto>> call, Response<List<OrderBoxResponseDto>> response) {
-                Log.e(TAG, "onResponse:" + shipStatus);
+                // Log.e(TAG, "onResponse:" + shipStatus);
                 Log.e(TAG, "onResponse:" + response.code());
 
                 if (response.isSuccessful()) {
@@ -311,8 +319,8 @@ public class Fragment4 extends Fragment implements FragmentCallback2 {
                         }
                         else if (code != null && code.equals("EXPIRE_ACCESS_TOKEN")) {
                             PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
-                            Fragment4 tf = (Fragment4) ((MainActivity)MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
-                            RefreshAuth.refresh(MainActivity.mContext, 3, "", tf);
+                            Fragment tf = (Fragment) ((MainActivity)MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
+                            RefreshAuth.refresh(MainActivity.mContext, 3, "");
                         }
                         else {
 
@@ -337,7 +345,8 @@ public class Fragment4 extends Fragment implements FragmentCallback2 {
     public void onScanBarcode(String trackingNo) {
         Log.i(TAG, "------------------- callback onScanBarcode");
 
-        tv_overseasBarcode.setText(trackingNo);
+        tv_barcode.setText(trackingNo);
+        tv_barcode.setTypeface(null, Typeface.BOLD);
         tv_scanResult.setText("요청중... 잠시만 기다려주세요");
         searchTrackingNo(trackingNo);
     }

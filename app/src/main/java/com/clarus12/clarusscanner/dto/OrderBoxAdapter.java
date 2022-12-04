@@ -21,12 +21,14 @@ public class OrderBoxAdapter extends RecyclerView.Adapter<OrderBoxAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         protected TextView id;
         protected TextView trackingNo;
+        protected TextView container;
         protected TextView status;
 
         public ViewHolder(View view) {
             super(view);
             this.id = (TextView) view.findViewById(R.id.id_listitem);
             this.trackingNo = (TextView) view.findViewById(R.id.trackingno_listitem);
+            this.container = (TextView) view.findViewById(R.id.container_listitem);
             this.status = (TextView) view.findViewById(R.id.status_listitem);
         }
     }
@@ -57,7 +59,14 @@ public class OrderBoxAdapter extends RecyclerView.Adapter<OrderBoxAdapter.ViewHo
         OrderBoxResponseDto item = mList.get(position) ;
 
         viewholder.id.setText(item.getOrderBoxShortId());
-        viewholder.trackingNo.setText(item.getOverseasTrackingNo());
+        if (item.getLocalTrackingNo() == null) {
+            item.setLocalTrackingNo("-");
+        }
+        if (item.getOverseasTrackingNo() == null) {
+            item.setOverseasTrackingNo("-");
+        }
+        viewholder.trackingNo.setText(item.getLocalTrackingNo() + "/\n"  + item.getOverseasTrackingNo());
+        viewholder.container.setText(item.getContainerCode());
         viewholder.status.setText(item.getShipStatusName());
     }
 

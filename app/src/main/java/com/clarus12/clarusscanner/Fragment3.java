@@ -4,9 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,20 +13,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
 
-import com.clarus12.clarusscanner.dto.BasicResponseDto;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.clarus12.clarusscanner.dto.OrderBoxAdapter;
 import com.clarus12.clarusscanner.dto.OrderBoxResponseDto;
-import com.clarus12.clarusscanner.dto.ResultResponseDto;
 import com.clarus12.clarusscanner.retrofit.Methods;
 import com.clarus12.clarusscanner.retrofit.RetrofitClient;
-import com.google.gson.JsonParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,9 +44,10 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 	MainActivity mainActivity;
 
 	TextView tv_scanResult;
-	String resultStr1;
-	TextView tv_overseasBarcode;
+	TextView tv_barcode;
 
+	ArrayList<OrderBoxResponseDto> mArrayList;
+	OrderBoxAdapter mAdapter;
 
 	@Override
 	public void onAttach(Context context) {
@@ -63,6 +66,30 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment3, container, false);
+
+		mArrayList = new ArrayList<>();
+		mAdapter = new OrderBoxAdapter(mArrayList);
+		RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_main_list);
+
+		LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity());
+		mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+		DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), mLinearLayoutManager.getOrientation());
+		mRecyclerView.addItemDecoration(dividerItemDecoration);
+		mRecyclerView.setAdapter(mAdapter);
+
+		OrderBoxResponseDto dto = new OrderBoxResponseDto();
+		dto.setOrderBoxShortId("No");
+		dto.setLocalTrackingNo("국내송장");
+		dto.setOverseasTrackingNo("해외송장");
+		dto.setContainerCode("컨테이너코드");
+		dto.setShipStatusName("status");
+		mArrayList.add(dto);
+
+		// 5 : 국내배송중
+		// 6 : 배송완료
+		this.getOrderBoxListByShipStatus2(5);
 
 //		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 //
@@ -93,7 +120,7 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 
 		tv_scanResult = rootView.findViewById(R.id.tv_scanResult);
 
-		tv_overseasBarcode = rootView.findViewById(R.id.tv_overseasBarcode);
+		tv_barcode = rootView.findViewById(R.id.tv_overseasBarcode);
 		// BtDeviceApi.tv_barcode1 = tv_overseasBarcode;
 
 //		tv_overseasBarcode.addTextChangedListener(new TextWatcher() {
@@ -125,7 +152,7 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 		btn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				tv_overseasBarcode.setText("");
+				tv_barcode.setText("");
 				tv_scanResult.setText("해외송장을 스캔해주세요");
 			}
 		});
@@ -149,6 +176,21 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 					//Log.e(TAG, "onResponse body:" + response.body().getResult());
 					tv_scanResult.setText("입고완료 성공");
 					tv_scanResult.setTextColor(Color.parseColor("#00FF00"));
+
+					int idx = 0;
+					for (OrderBoxResponseDto item : mArrayList) {
+//                        Log.e(TAG, "onResponse:" + trackingNo);
+//                        Log.e(TAG, "onResponse:" + item.getOverseasTrackingNo());
+
+						if (trackingNo.equals(item.getOverseasTrackingNo())) {
+							break;
+						}
+						idx ++;
+					}
+
+					if (idx < mArrayList.size()) {
+						mAdapter.removeAt(idx);
+					}
 				}
 				else {
 					Log.e(TAG, "onResponse:" + response);
@@ -185,8 +227,8 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 						}
 						else if (code != null && code.equals("EXPIRE_ACCESS_TOKEN")) {
 							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
-							Fragment3 tf = (Fragment3) ((MainActivity)MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
-							RefreshAuth.refresh(MainActivity.mContext, 2, trackingNo, tf);
+							Fragment tf = (Fragment) ((MainActivity)MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
+							RefreshAuth.refresh(MainActivity.mContext, 2, trackingNo);
 						}
 						else {
 							tv_scanResult.setText("실패: " + message);
@@ -210,11 +252,98 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 		});
 	}
 
+	public void getOrderBoxListByShipStatus2(int shipStatus) {
+
+		Methods methods = RetrofitClient.getRetrofitInstance(mainActivity.mContext).create(Methods.class);
+		Call<List<OrderBoxResponseDto>> call  = methods.getOrderBoxListByShipStatus2(shipStatus);
+
+		call.enqueue(new Callback<List<OrderBoxResponseDto>>() {
+			@Override
+			public void onResponse(Call<List<OrderBoxResponseDto>> call, Response<List<OrderBoxResponseDto>> response) {
+				// Log.e(TAG, "onResponse:" + shipStatus);
+				Log.e(TAG, "onResponse:" + response.code());
+
+				if (response.isSuccessful()) {
+					Log.e(TAG, "onResponse:" + response);
+					//Log.e(TAG, "onResponse body:" + response.body().getResult());
+
+					List<OrderBoxResponseDto> dtoList = response.body();
+
+					for (OrderBoxResponseDto dto : dtoList) {
+						mArrayList.add(dto); // RecyclerView의 마지막 줄에 삽입
+					}
+					mAdapter.notifyDataSetChanged();
+
+//                    int count = 30;
+//                    for (int i=0; i < count ; i++) {
+//                        Dictionary data = new Dictionary(i+"","Apple" + i, "사과" + i);
+//                        mArrayList.add(data); // RecyclerView의 마지막 줄에 삽입
+//                        mAdapter.notifyDataSetChanged();
+//                    }
+				}
+				else {
+					Log.e(TAG, "onResponse:" + response);
+
+					String errMsg = null;
+					String code = null;
+					String message = null;
+
+					if (response.errorBody() != null) {
+						try {
+							errMsg = response.errorBody().string();
+							Log.e(TAG, "onResponse:" + errMsg);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+
+						try {
+							JSONObject jsonObj = new JSONObject(errMsg);
+							code = jsonObj.getString("code");
+							message = jsonObj.getString("message");
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}
+
+					if (errMsg != null) {
+						if (code != null && code.equals("INVALID_ACCESS_TOKEN")) {
+							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
+							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.REFRESH_TOKEN);
+
+							Intent intent = new Intent(MainActivity.mContext, LoginActivity.class);
+							intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							MainActivity.mContext.startActivity(intent);
+						}
+						else if (code != null && code.equals("EXPIRE_ACCESS_TOKEN")) {
+							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
+							Fragment tf = (Fragment) ((MainActivity)MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
+							RefreshAuth.refresh(MainActivity.mContext, 2, "");
+						}
+						else {
+
+						}
+					}
+					else {
+
+					}
+
+				}
+			}
+
+			@Override
+			public void onFailure(Call<List<OrderBoxResponseDto>> call, Throwable t) {
+				Log.e(TAG, "onFailure:" + t.getMessage());
+
+			}
+		});
+	}
+
 	@Override
 	public void onScanBarcode(String trackingNo) {
 		Log.i(TAG, "------------------- callback onScanBarcode");
 
-		tv_overseasBarcode.setText(trackingNo);
+		tv_barcode.setText(trackingNo);
+		tv_barcode.setTypeface(null, Typeface.BOLD);
 		tv_scanResult.setText("요청중... 잠시만 기다려주세요");
 		searchTrackingNo(trackingNo);
 	}

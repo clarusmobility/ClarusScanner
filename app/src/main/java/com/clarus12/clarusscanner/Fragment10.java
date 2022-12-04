@@ -3,6 +3,7 @@ package com.clarus12.clarusscanner;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -143,8 +144,8 @@ public class Fragment10 extends Fragment implements FragmentCallback2 {
                             MainActivity.mContext.startActivity(intent);
                         } else if (code.equals("EXPIRE_ACCESS_TOKEN")) {
                             PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
-                            Fragment10 tf = (Fragment10) ((MainActivity) MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
-                            RefreshAuth.refresh(MainActivity.mContext, 10, trackingNo, tf);
+                            Fragment tf = (Fragment) ((MainActivity) MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
+                            RefreshAuth.refresh(MainActivity.mContext, 10, trackingNo);
                         }
                     }
                     else {
@@ -172,6 +173,8 @@ public class Fragment10 extends Fragment implements FragmentCallback2 {
         Log.i(TAG, "------------------- callback onScanBarcode");
 
         tv_barcode.setText(trackingNo);
+        tv_barcode.setTypeface(null, Typeface.BOLD);
+
         tv_result.setText("검색중... 잠시만 기다려주세요");
         searchTrackingNo(trackingNo);
     }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+
 import androidx.fragment.app.Fragment;
 
 import com.clarus12.clarusscanner.retrofit.Methods;
@@ -16,7 +17,7 @@ import retrofit2.Response;
 
 public class RefreshAuth {
 
-    static public void refresh(Context context, int fragmentId, String trackingNo, Fragment fragment) {
+    static public void refresh(Context context, int fragmentId, String trackingNo) {
 
         String TAG  = "RefreshAuth";
 
@@ -35,8 +36,7 @@ public class RefreshAuth {
                     Log.e(TAG, "onResponse:" + response.headers().get("refresh_token"));
                     PreferenceManager.setString(context, PreferenceManager.ACCESS_TOKEN,  response.headers().get("access_token").substring(7));
 
-
-//                    Fragment2 tf = (Fragment2) ((MainActivity)context).getSupportFragmentManager().findFragmentById(R.id.container);
+                    Fragment fragment = (Fragment) ((MainActivity)context).getSupportFragmentManager().findFragmentById(R.id.container);
 //                    if (tf == fragment) {
 //                        tf.searchTrackingNo(trackingNo, call2);
 //                    }

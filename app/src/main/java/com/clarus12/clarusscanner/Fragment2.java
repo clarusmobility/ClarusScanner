@@ -3,6 +3,7 @@ package com.clarus12.clarusscanner;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -259,8 +260,8 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 							MainActivity.mContext.startActivity(intent);
 						} else if (code.equals("EXPIRE_ACCESS_TOKEN")) {
 							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
-							Fragment2 tf = (Fragment2) ((MainActivity) MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
-							RefreshAuth.refresh(MainActivity.mContext, 1, trackingNo, tf);
+							Fragment tf = (Fragment) ((MainActivity) MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
+							RefreshAuth.refresh(MainActivity.mContext, 1, trackingNo);
 						}
 					}
 					else {
@@ -304,6 +305,8 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 		if (scanStatus == 0) {
 
 			tv_localBarcode.setText(trackingNo);
+			tv_localBarcode.setTypeface(null, Typeface.BOLD);
+
 			tv_localresult.setText("검색중... 잠시만 기다려주세요");
 			tv_overseasBarcode.setText("");
 			tv_match.setText("");
@@ -313,7 +316,10 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 		else if (scanStatus == 1) {
 			
 			tv_overseasBarcode.setText(trackingNo);
+			tv_overseasBarcode.setTypeface(null, Typeface.BOLD);
+
 			tv_match.setText("검색중... 잠시만 기다려주세요");
+
 			searchTrackingNo(trackingNo);
 		}
 	}
