@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
@@ -318,10 +319,12 @@ public class MainActivity extends AppCompatActivity
         BtDeviceApi.TAG = TAG;
 
         if (BtDeviceApi.connected) {
-            tv_devStatus.setText("Bluetooth is connected");
+            tv_devStatus.setText("블루투스 기기 연결됨");
+            tv_devStatus.setTextColor(Color.parseColor("#000000"));
         }
         else {
-            tv_devStatus.setText("Bluetooth is disconnected");
+            tv_devStatus.setText("블루투스 기기 연결 필요");
+            tv_devStatus.setTextColor(Color.parseColor("#E91E63"));
         }
 
     }

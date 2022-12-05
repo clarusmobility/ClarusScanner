@@ -181,7 +181,7 @@ public class Fragment4 extends Fragment implements FragmentCallback2 {
         Call<BasicResponseDto> call  = methods.releaseTrackingNo(trackingNo);
 
         tv_barcode.setText(trackingNo);
-        tv_barcode.setTypeface(null, Typeface.BOLD);
+       // tv_barcode.setTypeface(null, Typeface.BOLD);
         tv_scanResult.setText("요청중... 잠시만 기다려주세요");
 
         call.enqueue(new Callback<BasicResponseDto>() {

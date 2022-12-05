@@ -266,12 +266,14 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 						}
 					}
 					else {
-						String str = "송장번호 " + trackingNo + "을\n\n찾을 수 없습니다";
+						// String str = "송장번호 " + trackingNo + "을\n\n찾을 수 없습니다";
 						if (scanStatus == 0) {
+							String str = "국내송장번호 " + trackingNo + "을\n\n찾을 수 없습니다";
 							resultStr0 = str;
 							tv_localresult.setText(str);
 						}
 						else if (scanStatus == 1) {
+							String str = "해외송장번호 " + trackingNo + "을\n\n찾을 수 없습니다";
 							resultStr1 = str;
 							tv_match.setText(str);
 							tv_match.setTextColor(Color.parseColor("#E91E63"));
@@ -284,13 +286,15 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 			public void onFailure(Call<OrderBoxResponseDto> call, Throwable t) {
 				Log.e(TAG, "onFailure:" + t.getMessage());
 
-				String str = "송장번호 " + trackingNo + "을\n\n찾을 수 없습니다";
+				// String str = "송장번호 " + trackingNo + "을\n\n찾을 수 없습니다";
 
 				if (scanStatus == 0) {
+					String str = "국내송장번호 " + trackingNo + "을\n\n찾을 수 없습니다";
 					resultStr0 = str;
 					tv_localresult.setText(str);
 				}
 				else if (scanStatus == 1) {
+					String str = "해외송장번호 " + trackingNo + "을\n\n찾을 수 없습니다";
 					resultStr1 = str;
 					tv_match.setText(str);
 					tv_match.setTextColor(Color.parseColor("#E91E63"));
@@ -306,7 +310,7 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 		if (scanStatus == 0) {
 
 			tv_localBarcode.setText(trackingNo);
-			tv_localBarcode.setTypeface(null, Typeface.BOLD);
+			// tv_localBarcode.setTypeface(null, Typeface.BOLD);
 
 			tv_localresult.setText("검색중... 잠시만 기다려주세요");
 			tv_overseasBarcode.setText("");
@@ -317,7 +321,7 @@ public class Fragment2 extends Fragment implements FragmentCallback2 {
 		else if (scanStatus == 1) {
 			
 			tv_overseasBarcode.setText(trackingNo);
-			tv_overseasBarcode.setTypeface(null, Typeface.BOLD);
+			// tv_overseasBarcode.setTypeface(null, Typeface.BOLD);
 
 			tv_match.setText("검색중... 잠시만 기다려주세요");
 

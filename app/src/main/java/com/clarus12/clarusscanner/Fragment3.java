@@ -178,7 +178,7 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 		Call<OrderBoxResponseDto> call  = methods.getOrderBoxByLocalTrackingNoAndCheckin(trackingNo);
 
 		tv_barcode.setText(trackingNo);
-		tv_barcode.setTypeface(null, Typeface.BOLD);
+		// tv_barcode.setTypeface(null, Typeface.BOLD);
 		tv_scanResult.setText("요청중... 잠시만 기다려주세요");
 
 		call.enqueue(new Callback<OrderBoxResponseDto>() {

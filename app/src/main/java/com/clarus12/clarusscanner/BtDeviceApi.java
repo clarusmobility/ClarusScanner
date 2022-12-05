@@ -90,14 +90,16 @@ public class BtDeviceApi {
                         case BluetoothChatService.STATE_CONNECTED:
                             // Log.i(TAG, "MESSAGE_STATE_CHANGE:  STATE_CONNECTED" + msg.arg1);
                             connected = true;
-                            MainActivity.tv_devStatus.setText("Bluetooth is connected");
+                            // MainActivity.tv_devStatus.setText("Bluetooth is connected");
+                            MainActivity.tv_devStatus.setText("블루투스 기기 연결됨");
                             MainActivity.tv_devStatus.setTextColor(Color.parseColor("#000000"));
                             // Toast.makeText(MainActivity.mContext,"Bluetooth is connected", Toast.LENGTH_SHORT).show();
                             break;
                         case BluetoothChatService.STATE_LISTEN:
                             // Log.i(TAG, "MESSAGE_STATE_CHANGE:  STATE_LISTEN" + msg.arg1);
                             connected = false;
-                            MainActivity.tv_devStatus.setText("Bluetooth is disconnected");
+                            // MainActivity.tv_devStatus.setText("Bluetooth is disconnected");
+                            MainActivity.tv_devStatus.setText("블루투스 기기 연결 필요");
                             MainActivity.tv_devStatus.setTextColor(Color.parseColor("#E91E63"));
                             // Toast.makeText(MainActivity.mContext,"Bluetooth is disconnected", Toast.LENGTH_SHORT).show();
                             break;
