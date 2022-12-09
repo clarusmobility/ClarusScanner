@@ -182,6 +182,15 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nav_11) {
             onFragmentSelected(11, null);
         }
+        else if (id == R.id.nav_20) {
+            onFragmentSelected(20, null);
+        }
+        else if (id == R.id.nav_21) {
+            onFragmentSelected(21, null);
+        }
+        else if (id == R.id.nav_22) {
+            onFragmentSelected(22, null);
+        }
         else if (id == R.id.nav_user_logout) {
             // LOG OUT Request
             Methods methods = RetrofitClient.getRetrofitInstance(MainActivity.this).create(Methods.class);
@@ -224,23 +233,39 @@ public class MainActivity extends AppCompatActivity
         if (position == 0) {
             curFragment = new Fragment1();
             toolbar.setTitle("Main");
-        } else if (position == 1) {
+        }
+        else if (position == 1) {
             curFragment = new Fragment2();
             toolbar.setTitle("송장매칭(국내->해외)");
-        } else if (position == 2) {
-            curFragment = new Fragment3();
-            toolbar.setTitle("입고");
-        } else if (position == 3) {
-            curFragment = new Fragment4();
-            toolbar.setTitle("출고");
-        }else if (position == 10) {
-            curFragment = new Fragment10();
-            toolbar.setTitle("국내송장 스캔");
-        }else if (position == 11) {
-            curFragment = new Fragment11();
-            toolbar.setTitle("해외송장 스캔");
         }
-
+        else if (position == 2) {
+            curFragment = new Fragment3();
+            toolbar.setTitle("입고요청");
+        }
+        else if (position == 3) {
+            curFragment = new Fragment4();
+            toolbar.setTitle("출고요청");
+        }
+        else if (position == 10) {
+            curFragment = new Fragment10();
+            toolbar.setTitle("국내송장 검색");
+        }
+        else if (position == 11) {
+            curFragment = new Fragment11();
+            toolbar.setTitle("해외송장 검색");
+        }
+        else if (position == 20) {
+            curFragment = new Fragment20(20);
+            toolbar.setTitle("입고완료목록");
+        }
+        else if (position == 21) {
+            curFragment = new Fragment20(21);
+            toolbar.setTitle("출고지시목록");
+        }
+        else if (position == 22) {
+            curFragment = new Fragment20(22);
+            toolbar.setTitle("출고완료목록");
+        }
         getSupportFragmentManager().beginTransaction().replace(R.id.container, curFragment).commit();
     }
 

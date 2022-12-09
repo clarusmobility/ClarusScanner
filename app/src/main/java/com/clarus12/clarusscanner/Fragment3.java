@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.clarus12.clarusscanner.adapter.OrderBoxAdapter;
 import com.clarus12.clarusscanner.dto.OrderBoxResponseDto;
+import com.clarus12.clarusscanner.dto.ResultResponseDto;
 import com.clarus12.clarusscanner.retrofit.Methods;
 import com.clarus12.clarusscanner.retrofit.RetrofitClient;
 
@@ -39,6 +39,7 @@ import retrofit2.Response;
 
 public class Fragment3 extends Fragment implements FragmentCallback2 {
 	private static final String TAG = "Fragment3";
+	private final int fragmentId = 2;
 
 	FragmentCallback callback;
 
@@ -70,7 +71,7 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 		ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment3, container, false);
 
 		mArrayList = new ArrayList<>();
-		mAdapter = new OrderBoxAdapter(mArrayList);
+		mAdapter = new OrderBoxAdapter(getContext(), mArrayList);
 		RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_main_list);
 
 		LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity());
@@ -81,18 +82,21 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 		mRecyclerView.addItemDecoration(dividerItemDecoration);
 		mRecyclerView.setAdapter(mAdapter);
 
-		OrderBoxResponseDto dto = new OrderBoxResponseDto();
-		dto.setOrderBoxShortId("No");
-		dto.setLocalTrackingNo("국내송장");
-		dto.setOverseasTrackingNo("해외송장");
-		dto.setContainerCode("컨테이너코드");
-		dto.setShipStatusName("status");
-		mArrayList.add(dto);
-		tv_titleMainList = rootView.findViewById(R.id.title_main_list);
+//		OrderBoxResponseDto dto = new OrderBoxResponseDto();
+//		dto.setOrderBoxShortId("No");
+//		dto.setLocalTrackingNo("국내송장");
+//		dto.setOverseasTrackingNo("해외송장");
+//		dto.setContainerCode("컨테이너코드");
+//		dto.setShipStatusName("현재상태");
+//		mArrayList.add(dto);
+
+		mAdapter.makeTitle();
+		tv_titleMainList = rootView.findViewById(R.id.title_main1);
 
 		// 5 : 국내배송중
 		// 6 : 배송완료
-		this.getOrderBoxListByShipStatus2(5);
+		// 7 : 입고완료
+		this.getOrderBoxListByShipStatus(7);
 
 //		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 //
@@ -175,37 +179,41 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 	public void searchTrackingNo(String trackingNo) {
 
 		Methods methods = RetrofitClient.getRetrofitInstance(mainActivity.mContext).create(Methods.class);
-		Call<OrderBoxResponseDto> call  = methods.getOrderBoxByLocalTrackingNoAndCheckin(trackingNo);
+		Call<ResultResponseDto<OrderBoxResponseDto>> call  = methods.getOrderBoxByLocalTrackingNoAndCheckin(trackingNo);
 
 		tv_barcode.setText(trackingNo);
 		// tv_barcode.setTypeface(null, Typeface.BOLD);
 		tv_scanResult.setText("요청중... 잠시만 기다려주세요");
 
-		call.enqueue(new Callback<OrderBoxResponseDto>() {
+		call.enqueue(new Callback<ResultResponseDto<OrderBoxResponseDto>>() {
 			@Override
-			public void onResponse(Call<OrderBoxResponseDto> call, Response<OrderBoxResponseDto> response) {
+			public void onResponse(Call<ResultResponseDto<OrderBoxResponseDto>> call, Response<ResultResponseDto<OrderBoxResponseDto>> response) {
 				Log.e(TAG, "onResponse:" + trackingNo);
 				Log.e(TAG, "onResponse:" + response.code());
+
 				if (response.isSuccessful()) {
 					Log.e(TAG, "onResponse:" + response);
-					//Log.e(TAG, "onResponse body:" + response.body().getResult());
+//					Gson g = new Gson();
+//					OrderBoxResponseDto dto = g.fromJson(response.body().getResult().toString(), OrderBoxResponseDto.class);
+					OrderBoxResponseDto dto = response.body().getResult();
+
 					tv_scanResult.setText("입고완료 성공");
 					tv_scanResult.setTextColor(Color.parseColor("#00FF00"));
 
 					int idx = 0;
 					for (OrderBoxResponseDto item : mArrayList) {
-//                        Log.e(TAG, "onResponse:" + trackingNo);
-//                        Log.e(TAG, "onResponse:" + item.getOverseasTrackingNo());
-
-						if (trackingNo.equals(item.getOverseasTrackingNo())) {
+						if (trackingNo.equals(item.getLocalTrackingNo())) {
 							break;
 						}
 						idx ++;
 					}
 
-					if (idx < mArrayList.size()) {
-						mAdapter.removeAt(idx);
+					if (idx == mArrayList.size()) {
+						mArrayList.add(dto);
+						mAdapter.notifyDataSetChanged();
+						tv_titleMainList.setText("오늘 입고완료 (" + (mArrayList.size()-1) + "박스)");
 					}
+
 				}
 				else {
 					Log.e(TAG, "onResponse:" + response);
@@ -243,7 +251,7 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 						else if (code != null && code.equals("EXPIRE_ACCESS_TOKEN")) {
 							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
 							Fragment tf = (Fragment) ((MainActivity)MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
-							RefreshAuth.refresh(MainActivity.mContext, 2, trackingNo);
+							RefreshAuth.refresh(MainActivity.mContext, fragmentId, trackingNo);
 						}
 						else {
 							tv_scanResult.setText("실패: " + message);
@@ -260,37 +268,37 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 
 
 			@Override
-			public void onFailure(Call<OrderBoxResponseDto> call, Throwable t) {
+			public void onFailure(Call<ResultResponseDto<OrderBoxResponseDto>> call, Throwable t) {
 				Log.e(TAG, "onFailure:" + t.getMessage());
 
 			}
 		});
 	}
 
-	public void getOrderBoxListByShipStatus2(int shipStatus) {
+	public void getOrderBoxListByShipStatus(int shipStatus) {
 
 		Methods methods = RetrofitClient.getRetrofitInstance(mainActivity.mContext).create(Methods.class);
-		Call<List<OrderBoxResponseDto>> call  = methods.getOrderBoxListByShipStatus2(shipStatus);
-		tv_titleMainList.setText("입고대기 목록 요청중...");
+		Call<ResultResponseDto<List<OrderBoxResponseDto>>> call  = methods.getOrderBoxListByShipStatusAndToday(shipStatus);
+		tv_titleMainList.setText("오늘 입고완료 목록 요청중...");
 
-		call.enqueue(new Callback<List<OrderBoxResponseDto>>() {
+		call.enqueue(new Callback<ResultResponseDto<List<OrderBoxResponseDto>>>() {
 			@Override
-			public void onResponse(Call<List<OrderBoxResponseDto>> call, Response<List<OrderBoxResponseDto>> response) {
+			public void onResponse(Call<ResultResponseDto<List<OrderBoxResponseDto>>> call, Response<ResultResponseDto<List<OrderBoxResponseDto>>> response) {
 				// Log.e(TAG, "onResponse:" + shipStatus);
 				Log.e(TAG, "onResponse:" + response.code());
-				tv_titleMainList.setText("입고대기 목록");
+				tv_titleMainList.setText("오늘 입고완료 (0박스)");
 
 				if (response.isSuccessful()) {
 					Log.e(TAG, "onResponse:" + response);
 					//Log.e(TAG, "onResponse body:" + response.body().getResult());
 
-					List<OrderBoxResponseDto> dtoList = response.body();
+					List<OrderBoxResponseDto> dtoList = response.body().getResult();
 
 					for (OrderBoxResponseDto dto : dtoList) {
 						mArrayList.add(dto); // RecyclerView의 마지막 줄에 삽입
 					}
 					mAdapter.notifyDataSetChanged();
-
+					tv_titleMainList.setText("오늘 입고완료 (" + (mArrayList.size()-1) + "박스)");
 //                    int count = 30;
 //                    for (int i=0; i < count ; i++) {
 //                        Dictionary data = new Dictionary(i+"","Apple" + i, "사과" + i);
@@ -334,7 +342,7 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 						else if (code != null && code.equals("EXPIRE_ACCESS_TOKEN")) {
 							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
 							Fragment tf = (Fragment) ((MainActivity)MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
-							RefreshAuth.refresh(MainActivity.mContext, 2, "");
+							RefreshAuth.refresh(MainActivity.mContext, fragmentId, "");
 						}
 						else {
 
@@ -348,7 +356,7 @@ public class Fragment3 extends Fragment implements FragmentCallback2 {
 			}
 
 			@Override
-			public void onFailure(Call<List<OrderBoxResponseDto>> call, Throwable t) {
+			public void onFailure(Call<ResultResponseDto<List<OrderBoxResponseDto>>> call, Throwable t) {
 				Log.e(TAG, "onFailure:" + t.getMessage());
 
 			}

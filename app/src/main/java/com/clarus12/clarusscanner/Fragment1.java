@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import com.clarus12.clarusscanner.dto.ResultResponseDto;
 import com.clarus12.clarusscanner.dto.WmsSummaryResponse;
 import com.clarus12.clarusscanner.retrofit.Methods;
 import com.clarus12.clarusscanner.retrofit.RetrofitClient;
@@ -31,12 +32,16 @@ import retrofit2.Response;
 
 public class Fragment1 extends Fragment  {
 	private static final String TAG = "Fragment1";
+	private final int fragmentId = 0;
+
 	MainActivity mainActivity;
 	FragmentCallback callback;
 
 	TextView tv_cnt1;
 	TextView tv_cnt2;
 	TextView tv_cnt3;
+	TextView tv_cnt4;
+	TextView tv_cnt5;
 
 	@Override
 	public void onAttach(Context context) {
@@ -81,6 +86,8 @@ public class Fragment1 extends Fragment  {
 		tv_cnt1 = rootView.findViewById(R.id.tv_cnt1);
 		tv_cnt2 = rootView.findViewById(R.id.tv_cnt2);
 		tv_cnt3 = rootView.findViewById(R.id.tv_cnt3);
+		tv_cnt4 = rootView.findViewById(R.id.tv_cnt4);
+		tv_cnt5 = rootView.findViewById(R.id.tv_cnt5);
 		return rootView;
 	}
 
@@ -118,26 +125,28 @@ public class Fragment1 extends Fragment  {
 	public void callbackGetWmsSummary() {
 
 		Methods methods = RetrofitClient.getRetrofitInstance(mainActivity.mContext).create(Methods.class);
-		Call<WmsSummaryResponse> call = null;
+		Call<ResultResponseDto<WmsSummaryResponse>> call = null;
 
 		call  = methods.wmsSummary();
 
-		call.enqueue(new Callback<WmsSummaryResponse>() {
+		call.enqueue(new Callback<ResultResponseDto<WmsSummaryResponse>>() {
 			@Override
-			public void onResponse(Call<WmsSummaryResponse> call, Response<WmsSummaryResponse> response) {
+			public void onResponse(Call<ResultResponseDto<WmsSummaryResponse>> call, Response<ResultResponseDto<WmsSummaryResponse>> response) {
 				Log.e(TAG, "onResponse:" + response.code());
 
 				if (response.isSuccessful()) {
 					Log.e(TAG, "onResponse:" + response);
 
-					WmsSummaryResponse dto = response.body();
+					WmsSummaryResponse dto = response.body().getResult();
 //					Log.d(TAG, "onResponse:" + dto.getCompleteCheckIn());
 //					Log.d(TAG, "onResponse:" + dto.getReadyRelease());
 //					Log.d(TAG, "onResponse:" + dto.getCompleteRelease());
 
-					tv_cnt1.setText("입고완료 : 박스 " + dto.getCompleteCheckIn() + "개");
-					tv_cnt2.setText("출고지시 : 박스 " + dto.getReadyRelease()  + "개");
-					tv_cnt3.setText("출고완료 : 박스 " + dto.getCompleteRelease()  + "개");
+					tv_cnt1.setText("오늘 입고완료 합계:\t" + dto.getCntCompleteCheckInToday() + " 박스");
+					tv_cnt2.setText("오늘 출고완료 합계:\t" + dto.getCntCompleteReleaseToday() + " 박스");
+					tv_cnt3.setText("입고완료 합계:\t" + dto.getCntCurrentCompleteCheckIn()  + " 박스");
+					tv_cnt4.setText("출고지시 합계:\t" + dto.getCntCurrentReadyRelease() + " 박스");
+					tv_cnt5.setText("출고완료 합계:\t" + dto.getCntCurrentCompleteRelease()  + " 박스");
 				}
 				else {
 					Log.e(TAG, "onResponse:" + response);
@@ -174,7 +183,7 @@ public class Fragment1 extends Fragment  {
 						} else if (code.equals("EXPIRE_ACCESS_TOKEN")) {
 							PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
 							Fragment tf = (Fragment) ((MainActivity) MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
-							RefreshAuth.refresh(MainActivity.mContext, 0, "");
+							RefreshAuth.refresh(MainActivity.mContext, fragmentId, "");
 						}
 					}
 					else {
@@ -183,7 +192,7 @@ public class Fragment1 extends Fragment  {
 			}
 
 			@Override
-			public void onFailure(Call<WmsSummaryResponse> call, Throwable t) {
+			public void onFailure(Call<ResultResponseDto<WmsSummaryResponse>> call, Throwable t) {
 				Log.e(TAG, "onFailure:" + t.getMessage());
 			}
 		});

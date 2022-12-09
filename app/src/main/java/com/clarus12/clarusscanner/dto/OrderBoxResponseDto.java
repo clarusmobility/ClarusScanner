@@ -29,6 +29,10 @@ public class OrderBoxResponseDto {
     String receiverName;
     String receiverAddress;
 
+
+
+    String lastShipStatusDate;
+
     public long getOrderBoxId() {
         return orderBoxId;
     }
@@ -115,5 +119,13 @@ public class OrderBoxResponseDto {
 
     public void setShipStatusName(String shipStatusName) {
         this.shipStatusName = shipStatusName;
+    }
+
+    public String getLastShipStatusDate() {
+        return lastShipStatusDate;
+    }
+
+    public void setLastShipStatusDate(String lastShipStatusDate) {
+        this.lastShipStatusDate = lastShipStatusDate;
     }
 }

@@ -49,7 +49,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_main_list"
         android:layout_width="0dp"
-        android:layout_height="450dp"
+        android:layout_height="525dp"
         android:layout_marginTop="50dp"
         android:scrollbarFadeDuration="0"
         android:scrollbarSize="5dp"
@@ -65,7 +65,7 @@
         android:id="@+id/btn_resetScan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:text="초기화"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -73,13 +73,12 @@
         app:layout_constraintTop_toBottomOf="@+id/recyclerview_main_list" />
 
     <TextView
-        android:id="@+id/title_main_list"
+        android:id="@+id/title_main1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="출고지시 목록"
+        android:layout_marginStart="16dp"
+        android:text="오늘 출고완료 목록"
         app:layout_constraintBottom_toTopOf="@+id/recyclerview_main_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -92,4 +91,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_barcode"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title_main2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="출고지시"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerview_main_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.185"
+        app:layout_constraintStart_toEndOf="@+id/title_main1" />
 </androidx.constraintlayout.widget.ConstraintLayout>

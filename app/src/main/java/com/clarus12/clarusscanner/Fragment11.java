@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.clarus12.clarusscanner.dto.OrderBoxResponseDto;
+import com.clarus12.clarusscanner.dto.ResultResponseDto;
 import com.clarus12.clarusscanner.retrofit.Methods;
 import com.clarus12.clarusscanner.retrofit.RetrofitClient;
 
@@ -29,6 +30,8 @@ import retrofit2.Response;
 
 public class Fragment11 extends Fragment implements FragmentCallback2 {
     private static final String TAG = "Fragment11";
+    private final int fragmentId = 11;
+
     MainActivity mainActivity;
 
     FragmentCallback callback;
@@ -91,7 +94,7 @@ public class Fragment11 extends Fragment implements FragmentCallback2 {
     public void searchTrackingNo(String trackingNo) {
 
         Methods methods = RetrofitClient.getRetrofitInstance(mainActivity.mContext).create(Methods.class);
-        Call<OrderBoxResponseDto> call = null;
+        Call<ResultResponseDto<OrderBoxResponseDto>> call = null;
 
         // call  = methods.getOrderBoxByOverseasTrackingNoAndCheckin(trackingNo);
         call  = methods.getOrderBoxByOverseasTrackingNo(trackingNo);
@@ -100,29 +103,32 @@ public class Fragment11 extends Fragment implements FragmentCallback2 {
         // tv_barcode.setTypeface(null, Typeface.BOLD);
         tv_result.setText("검색중... 잠시만 기다려주세요");
 
-        call.enqueue(new Callback<OrderBoxResponseDto>() {
+        call.enqueue(new Callback<ResultResponseDto<OrderBoxResponseDto>>() {
             @Override
-            public void onResponse(Call<OrderBoxResponseDto> call, Response<OrderBoxResponseDto> response) {
+            public void onResponse(Call<ResultResponseDto<OrderBoxResponseDto>> call, Response<ResultResponseDto<OrderBoxResponseDto>> response) {
                 Log.e(TAG, "onResponse:" + trackingNo);
                 Log.e(TAG, "onResponse:" + response.code());
 
                 if (response.isSuccessful()) {
                     Log.e(TAG, "onResponse:" + response);
 
-                    OrderBoxResponseDto dto = response.body();
+                    OrderBoxResponseDto dto = response.body().getResult();
 
-                    orderBoxId = response.body().getOrderBoxId();
-                    localTrackingNo = response.body().getLocalTrackingNo();
-                    overseasTrackingNo = response.body().getOverseasTrackingNo();
-                    String shipStatusName = response.body().getShipStatusName();
-                    String containerCode = response.body().getContainerCode();
-                    String orderBoxShortId = response.body().getOrderBoxShortId();
+                    orderBoxId = dto.getOrderBoxId();
+                    localTrackingNo = dto.getLocalTrackingNo();
+                    overseasTrackingNo = dto.getOverseasTrackingNo();
+                    String shipStatusName = dto.getShipStatusName();
+                    String containerCode = dto.getContainerCode();
+                    String orderBoxShortId = dto.getOrderBoxShortId();
+                    String lastDate = dto.getLastShipStatusDate();
+
                     resultStr0 = "ID:\t" + orderBoxId
                             + "\n\n박스번호:\t" + orderBoxShortId
                             +  "\n\n배송상태:\t" +  shipStatusName
                             +  "\n\n컨테이너코드:\t" + containerCode
                             +  "\n\n국내송장번호:\t" + localTrackingNo
-                            + "\n\n해외송장번호:\t" + overseasTrackingNo;
+                            + "\n\n해외송장번호:\t" + overseasTrackingNo
+                            +  "\n\n날짜:\t" + lastDate ;
                     tv_result.setText(resultStr0);
 
                 }
@@ -161,7 +167,7 @@ public class Fragment11 extends Fragment implements FragmentCallback2 {
                         } else if (code.equals("EXPIRE_ACCESS_TOKEN")) {
                             PreferenceManager.removeKey(MainActivity.mContext, PreferenceManager.ACCESS_TOKEN);
                             Fragment tf = (Fragment) ((MainActivity) MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.container);
-                            RefreshAuth.refresh(MainActivity.mContext, 11, trackingNo);
+                            RefreshAuth.refresh(MainActivity.mContext, fragmentId, trackingNo);
                         }
                     }
                     else {
@@ -173,7 +179,7 @@ public class Fragment11 extends Fragment implements FragmentCallback2 {
             }
 
             @Override
-            public void onFailure(Call<OrderBoxResponseDto> call, Throwable t) {
+            public void onFailure(Call<ResultResponseDto<OrderBoxResponseDto>> call, Throwable t) {
                 Log.e(TAG, "onFailure:" + t.getMessage());
 
                 String str = "해외송장번호 " + trackingNo + "을\n\n찾을 수 없습니다";

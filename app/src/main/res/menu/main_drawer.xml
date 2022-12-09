@@ -9,15 +9,15 @@
         <item
             android:id="@+id/nav_10"
             android:icon="@android:drawable/ic_menu_camera"
-            android:title="국내송장 스캔" />
+            android:title="국내송장 검색" />
         <item
             android:id="@+id/nav_11"
             android:icon="@android:drawable/ic_menu_camera"
-            android:title="해외송장 스캔" />
+            android:title="해외송장 검색" />
         <item
             android:id="@+id/nav_2"
             android:icon="@android:drawable/ic_menu_camera"
-            android:title="입고" />
+            android:title="입고요청" />
         <item
             android:id="@+id/nav_1"
             android:icon="@android:drawable/ic_menu_camera"
@@ -25,8 +25,31 @@
         <item
             android:id="@+id/nav_3"
             android:icon="@android:drawable/ic_menu_camera"
-            android:title="출고" />
+            android:title="출고요청" />
+
+
     </group>
+
+
+    <item
+        android:title="목록">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_20"
+                    android:icon="@android:drawable/ic_menu_camera"
+                    android:title="입고완료목록" />
+                <item
+                    android:id="@+id/nav_21"
+                    android:icon="@android:drawable/ic_menu_camera"
+                    android:title="출고지시목록" />
+                <item
+                    android:id="@+id/nav_22"
+                    android:icon="@android:drawable/ic_menu_camera"
+                    android:title="출고완료목록" />
+            </group>
+        </menu>
+    </item>
 
     <item
         android:title="사용자">

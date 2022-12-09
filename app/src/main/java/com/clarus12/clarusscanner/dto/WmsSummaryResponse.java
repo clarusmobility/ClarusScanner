@@ -2,32 +2,69 @@ package com.clarus12.clarusscanner.dto;
 
 public class WmsSummaryResponse {
 
-    long completeCheckIn;
-    long readyRelease;
-    long completeRelease;
+    private long cntCompleteCheckInToday;
+    private long cntCompleteCheckInMonth;
 
+    private long cntCompleteReleaseToday;
+    private long cntCompleteReleaseMonth;
 
-    public long getCompleteCheckIn() {
-        return completeCheckIn;
+    private long cntCurrentCompleteCheckIn;
+    private long cntCurrentReadyRelease;
+    private long cntCurrentCompleteRelease;
+
+    public long getCntCompleteCheckInToday() {
+        return cntCompleteCheckInToday;
     }
 
-    public void setCompleteCheckIn(long completeCheckIn) {
-        this.completeCheckIn = completeCheckIn;
+    public void setCntCompleteCheckInToday(long cntCompleteCheckInToday) {
+        this.cntCompleteCheckInToday = cntCompleteCheckInToday;
     }
 
-    public long getReadyRelease() {
-        return readyRelease;
+    public long getCntCompleteCheckInMonth() {
+        return cntCompleteCheckInMonth;
     }
 
-    public void setReadyRelease(long readyRelease) {
-        this.readyRelease = readyRelease;
+    public void setCntCompleteCheckInMonth(long cntCompleteCheckInMonth) {
+        this.cntCompleteCheckInMonth = cntCompleteCheckInMonth;
     }
 
-    public long getCompleteRelease() {
-        return completeRelease;
+    public long getCntCompleteReleaseToday() {
+        return cntCompleteReleaseToday;
     }
 
-    public void setCompleteRelease(long completeRelease) {
-        this.completeRelease = completeRelease;
+    public void setCntCompleteReleaseToday(long cntCompleteReleaseToday) {
+        this.cntCompleteReleaseToday = cntCompleteReleaseToday;
+    }
+
+    public long getCntCompleteReleaseMonth() {
+        return cntCompleteReleaseMonth;
+    }
+
+    public void setCntCompleteReleaseMonth(long cntCompleteReleaseMonth) {
+        this.cntCompleteReleaseMonth = cntCompleteReleaseMonth;
+    }
+
+    public long getCntCurrentCompleteCheckIn() {
+        return cntCurrentCompleteCheckIn;
+    }
+
+    public void setCntCurrentCompleteCheckIn(long cntCurrentCompleteCheckIn) {
+        this.cntCurrentCompleteCheckIn = cntCurrentCompleteCheckIn;
+    }
+
+    public long getCntCurrentReadyRelease() {
+        return cntCurrentReadyRelease;
+    }
+
+    public void setCntCurrentReadyRelease(long cntCurrentReadyRelease) {
+        this.cntCurrentReadyRelease = cntCurrentReadyRelease;
+    }
+
+    public long getCntCurrentCompleteRelease() {
+        return cntCurrentCompleteRelease;
+    }
+
+    public void setCntCurrentCompleteRelease(long cntCurrentCompleteRelease) {
+        this.cntCurrentCompleteRelease = cntCurrentCompleteRelease;
     }
 }
