@@ -1,5 +1,6 @@
 package com.clarus12.clarusscanner;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.nfc.NfcAdapter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -147,6 +149,24 @@ public class MainActivity extends AppCompatActivity
 
         // ActivityCompat.requestPermissions(MainActivity.this, permission_list,  1);
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            requestPermissions(
+                    new String[]{
+                            Manifest.permission.BLUETOOTH,
+                            Manifest.permission.BLUETOOTH_SCAN,
+                            Manifest.permission.BLUETOOTH_ADVERTISE,
+                            Manifest.permission.BLUETOOTH_CONNECT
+                    },
+                    1);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(
+                    new String[]{
+                            Manifest.permission.BLUETOOTH
+
+                    },
+                    1);
+        }
         mContext = this;
         BtDeviceApi.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (BtDeviceApi.mBluetoothAdapter == null) {

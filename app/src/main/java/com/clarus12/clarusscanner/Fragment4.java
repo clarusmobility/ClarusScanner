@@ -215,8 +215,11 @@ public class Fragment4 extends Fragment implements FragmentCallback2 {
                     }
 
                     if (idx == mArrayList.size()) {
-                        mArrayList.add(dto);
-                        mAdapter.notifyDataSetChanged();
+//                        mArrayList.add(dto);
+//                        mAdapter.notifyDataSetChanged();
+
+                        mArrayList.add(1, dto);
+                        mAdapter.notifyItemInserted(1);
                         tv_titleMain1.setText("오늘 출고완료 (" + (mArrayList.size()-1) + "박스)");
                     }
 
