@@ -20,7 +20,7 @@ public class RetrofitClient {
 
     private static Retrofit retrofit;
     private static final String BASE_URL = "https://clarus12.com";
-    // private static final String BASE_URL = "https://214d-211-206-77-101.ngrok.io";
+    // private static final String BASE_URL = "https://25aa-211-206-77-101.ngrok-free.app/";
 
     // private static String access_token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjE3MzIzMDUsInN1YiI6Indtc0BjbGFydXNtb2JpbGl0eS5jb20iLCJleHAiOjE2NjI5NDE5MDUsInVpZCI6IjIifQ.uGt2cyI1JOfxfgx1LY5uDd4FldBovREwt355b6JhRVo";
 

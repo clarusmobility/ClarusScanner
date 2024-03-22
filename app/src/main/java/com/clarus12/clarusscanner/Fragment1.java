@@ -136,6 +136,8 @@ public class Fragment1 extends Fragment  {
 
 				if (response.isSuccessful()) {
 					Log.e(TAG, "onResponse:" + response);
+					Log.e(TAG, "onResponse:" + response.body().getResult().getCntCompleteCheckInToday());
+
 
 					WmsSummaryResponse dto = response.body().getResult();
 //					Log.d(TAG, "onResponse:" + dto.getCompleteCheckIn());
